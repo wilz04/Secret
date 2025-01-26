@@ -1,0 +1,136 @@
+<html>
+	<head>
+		<title>
+			Documentación de Secret
+		</title>
+	</head>
+	<body bgcolor="#3169B6">
+		<center>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr bgcolor="#F0F0F0">
+					<td colspan="3">
+						<img src="Images/Top.jpg">
+					</td>
+				</tr>
+				<tr bgcolor="#F0F0F0">
+					<td width="20">
+					</td>
+					<td>
+						<font face="Verdana, Arial, Helvetica, sans-serif" size="1">
+							<h1 align="center">
+								<u>
+									Detrás de Secret®
+								</u>
+							</h1>
+							Secret®, aunque no es su objetivo principal provee un editor de texto<br>
+							capaz de soportar miles de caracteres, cuenta con todas las facilidades<br>
+							que tiene un editor estándar relacionadas con el manejo de archivos como<br>
+							crear, abrir, guardar, guardar como, copiar, cortar, pegar, etc.<br>
+							<br>
+							Además Secret® cuenta con una interfase de usuario muy amigable y fácil de<br>
+							entender.<br>
+							<br>
+							Su objetivo principal consiste en encriptar información leída de un<br>
+							archivo o texto digitado por el usuario.<br>
+							<br>
+							Si la información encriptada esta contenida en un archivo (*.txt), Secret®<br>
+							es capas de crear un archivo alterno (*.dat) con la información<br>
+							encriptada.<br>
+							<br>
+							El método de encriptamiento utilizado por este software es el MD5,<br>
+							aplicado en el campo de las Bases de Datos, Es un método irreversible,<br>
+							esto Significa que con los datos encriptados es imposible obtener la<br>
+							información original.<br>
+							<br>
+							El Algoritmo Compendio del Mensaje 5 (Message Digest 5, MD5), es una<br>
+							función de hash (de dispersión) que permite obtener a través de un proceso<br>
+							Muy complejo a nivel de bits (lo que hace prácticamente imposible<br> 
+							descifrar el mensaje original), una combinación numérica secuencial de 128<br>
+							bits como resultado final, sin importar la longitud de la información<br>
+							entrante. El resultado se da en números hexadecimales, por lo que en<br>
+							realidad los 128 bits resultantes se convierten en tan solo 32 dígitos.<br>
+							<br>
+							Este algoritmo esta pensado para las aplicaciones donde un archivo grande<br>
+							debe ser "comprimido" de una manera segura antes de ser encriptado de<br>
+							forma privada (secreta).<br>
+							<br>
+							El proceso consiste, por medio de una subfusión, en descomponer la<br>
+							información original (entrante en forma de cadena), carácter por carácter a<br>
+							un numero decimal, después de esto, otra subfusión atrapa el resultado de<br>
+							la primera y transforma sus números decimales a binarios, luego, una<br>
+							tercera subfusión atrapa el resultado de la anterior y rellena la cadena<br>
+							binaria con bits vacíos (0's) hasta convertir su longitud en múltiplo<br>
+							de 16, para que después, otra subfusión atrape la cadena resultante y la<br>
+							procese de la en 16 caracteres o bits y la procese y transforme por<br>
+							medio de cuatro funciones que operan a nivel de bits, y aquí es donde la<br>
+							longitud del dato final se fuerza a 32 caracteres (128 bits).<br>
+							<br>
+							Este es un muy breve resumen del algoritmo que transforma al dato entrante<br>
+							en el saliente.
+							<br>
+							En pseudocódigo se vería mas o menos así:<br>
+							<br>
+							var int[64] r, k<br>
+							r[0..15] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22}<br>
+							r[16..31] = {5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20}<br>
+							r[32..47] = {4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23}<br>
+							r[48..63] = {6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21}<br>
+							<br>
+							desde i = 0 hasta 63 hacer<br>
+							&nbsp;&nbsp;k[i] = floor(abs(sin(i + 1)) × 2^32)<br>
+							fin pour<br>
+							<br>
+							var int h0 = 0x01234567<br>
+							var int h1 = 0x89ABCDEF<br>
+							var int h2 = 0xFEDCBA98<br>
+							var int h3 = 0x76543210<br>
+							<br>
+							desde i = 0 hasta long(datoOriginal) hacer i += 16<br>
+							&nbsp;&nbsp;var int a = h0<br>
+							&nbsp;&nbsp;var int b = h1<br>
+							&nbsp;&nbsp;var int c = h2<br>
+							&nbsp;&nbsp;var int d = h3<br>
+							<br>
+							&nbsp;&nbsp;desde i = 0 hasta 63 hacer<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;si 0 &lt;= i &lt;= 15 entonces<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f = (b y c) o ((no b) y d)<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g = i<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;sino si 16 &lt;= i &lt;= 31 entonces<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f = (d y b) o ((no d) y c)<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g = (5*i + 1) mod 16<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;sino si 32 &lt;= i &lt;= 47 entonces<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f = b xor c xor d<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g = (3*i + 5) mod 16<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;sino si 48 &lt;= i &lt;= 63 entonces<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f = c xor (b o (no d))<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g = (7*i) mod 16<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;fin si<br>
+							<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;var int temp = d<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;d = c<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;c = b<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;b = ((a + f + k(i) + w(g)) leftrotate r(i)) + b<br>
+							&nbsp;&nbsp;&nbsp;&nbsp;a = temp<br>
+							&nbsp;&nbsp;fin desde<br>
+							<br>
+							&nbsp;&nbsp;h0 = h0 + a<br>
+							&nbsp;&nbsp;h1 = h1 + b<br>
+							&nbsp;&nbsp;h2 = h2 + c<br>
+							&nbsp;&nbsp;h3 = h3 + d<br>
+							fin desde<br>
+							<br>
+							var int sol = h0 + h1 + h2 + h3<br>
+						</font>
+					</td>
+					<td width="4">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<img src="Images/Bottom.jpg">
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+</html>
